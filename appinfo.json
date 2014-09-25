@@ -1,0 +1,17 @@
+{
+  "uuid": "ba04d3e9-8b3a-4d50-8e39-23ad8a14a287",
+  "shortName": "golf-app",
+  "longName": "golf-app",
+  "companyName": "MakeAwesomeHappen",
+  "versionCode": 1,
+  "versionLabel": "1.0",
+  "watchapp": {
+    "watchface": false
+  },
+  "appKeys": {
+    "dummy": 0
+  },
+  "resources": {
+    "media": []
+  }
+}
