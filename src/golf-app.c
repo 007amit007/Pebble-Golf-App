@@ -1,38 +1,60 @@
 #include <pebble.h>
 
+/* TODO
+ * Display current hole
+ * Display current number of strokes
+ * Make back decrease the current hole
+ * Make select increase the current hole
+ * Make up increase the number of strokes
+ * Make down decrease the number of strokes
+ * Interface with phone (Android app)
+ */
+
 static Window *window;
-static TextLayer *text_layer;
+static TextLayer *current_hole_text_layer;
+static int current_hole = 1;
+static int strokes = 0;
 
 static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
-  text_layer_set_text(text_layer, "Select");
+  text_layer_set_text(current_hole_text_layer, "Select");
 }
 
 static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
-  text_layer_set_text(text_layer, "Up");
+  text_layer_set_text(current_hole_text_layer, "Up");
 }
 
 static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
-  text_layer_set_text(text_layer, "Down");
+  text_layer_set_text(current_hole_text_layer, "Down");
+}
+
+static void back_click_handler(ClickRecognizerRef recognizer, void *context) {
+  text_layer_set_text(current_hole_text_layer, "Back");
 }
 
 static void click_config_provider(void *context) {
   window_single_click_subscribe(BUTTON_ID_SELECT, select_click_handler);
   window_single_click_subscribe(BUTTON_ID_UP, up_click_handler);
   window_single_click_subscribe(BUTTON_ID_DOWN, down_click_handler);
+  window_single_click_subscribe(BUTTON_ID_BACK, back_click_handler);
 }
 
 static void window_load(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
 
-  text_layer = text_layer_create((GRect) { .origin = { 0, 72 }, .size = { bounds.size.w, 20 } });
-  text_layer_set_text(text_layer, "Press a button");
-  text_layer_set_text_alignment(text_layer, GTextAlignmentCenter);
-  layer_add_child(window_layer, text_layer_get_layer(text_layer));
+  current_hole_text_layer = text_layer_create((GRect) {
+    .origin = { 0, 30 },
+    .size = { bounds.size.w, 30 }
+  });
+  text_layer_set_text(current_hole_text_layer, "Press a button");
+  text_layer_set_font(current_hole_text_layer, fonts_get_system_font(
+        FONT_KEY_GOTHIC_28));
+  text_layer_set_text_alignment(current_hole_text_layer, GTextAlignmentCenter);
+  layer_add_child(window_layer, text_layer_get_layer(current_hole_text_layer));
 }
 
 static void window_unload(Window *window) {
-  text_layer_destroy(text_layer);
+  text_layer_destroy(current_hole_text_layer);
 }
 
 static void init(void) {
