@@ -12,15 +12,28 @@
 
 static Window *window;
 static TextLayer *current_hole_text_layer;
+static char *hole_label = "Hole ";
 static int current_hole = 1;
+static char current_hole_string[2];
+static char stroke_label[8] = "Stroke ";
 static int strokes = 0;
+static char current_strokes_string[2];
+
 
 static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
   text_layer_set_text(current_hole_text_layer, "Select");
 }
 
 static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
-  text_layer_set_text(current_hole_text_layer, "Up");
+  if (strokes <= 9) {
+    strokes += 1;
+  }
+  static char label[10];
+  strncpy(label, stroke_label, sizeof(stroke_label));
+  char current_stroke_label[10];
+  snprintf(current_stroke_label, sizeof(current_stroke_label), "%d", strokes);
+  strncat(label, current_stroke_label, sizeof(current_stroke_label));
+  text_layer_set_text(current_hole_text_layer, label);
 }
 
 static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
